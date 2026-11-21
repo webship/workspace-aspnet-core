@@ -349,7 +349,11 @@ function add_aspnet_core_users() {
     echo "      User name: ${!user_name}";
     echo "      User mail: ${!user_mail}";
     echo "  User password: ${!user_password}";
-    echo "      User role: ${!user_role}";
+    if [ "${!user_role}" == '_none_' ] ; then
+      echo "   No user role for this user";
+    else
+      echo "      User role: ${!user_role}";
+    fi
     [ -n "${!user_state}" ] && echo "     User state: ${!user_state}";
     echo " ================================================================= ";
   done
@@ -419,11 +423,13 @@ function aspnet_core_cli_tool() {
     set_aspnet_core_users ;
     cancel_aspnet_core_users ;
   else
-    local template account_path='/Identity/Account' environment ;
-    template="$(aspnet_core_template .)" ;
-    [ "${template}" == 'blazor' ] && account_path='/Account' ;
+    local kind='the Razor Pages app' account_path='/Identity/Account' environment ;
+    if [ "$(aspnet_core_template .)" == 'blazor' ] ; then
+      kind='the Blazor Web App' ;
+      account_path='/Account' ;
+    fi
     environment="$(sed -n 's/^  - ASPNETCORE_ENVIRONMENT=//p' .ddev/config.aspnet-core.yaml)" ;
-    echo "${doc_name}/${PROJECT_NAME}: the ${template} app $(aspnet_core_app_name .), $(aspnet_core_versions), in ${environment:-Production}" ;
+    echo "${doc_name}/${PROJECT_NAME}: ${kind} $(aspnet_core_app_name .), $(aspnet_core_versions), in ${environment:-Production}" ;
     echo "  the app:          https://${PROJECT_NAME}.ddev.site" ;
     echo "  the login:        https://${PROJECT_NAME}.ddev.site${account_path}/Login" ;
     echo "  the mail catcher: https://${PROJECT_NAME}.ddev.site:8026" ;

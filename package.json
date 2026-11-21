@@ -27,6 +27,7 @@
   "workspacePlugin": {
     "name": "aspnet-core",
     "label": "ASP.NET Core",
+    "summary": "A builder for ASP.NET Core apps with individual accounts (the Razor Pages app or the Blazor Web App), and the dotnet tool",
     "needs": [
       [
         "dev",

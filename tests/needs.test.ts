@@ -18,3 +18,9 @@ test("the manifest says what the plugin needs: the plugins and the commands it c
   for (const kind of ['agents', 'skills', 'commands', 'prompts']) assert.ok(manifest.ai[kind].length > 0, `it ships ${kind}, which is why it needs the folder they are placed in`);
   assert.match(fs.readFileSync(path.join(PKG, 'README.md'), 'utf8'), /^## What it needs$/m, 'and the README says so');
 });
+
+test('the manifest says in one line what the plugin is, for the Settings row', () => {
+  assert.match(manifest.summary, /^A builder for ASP\.NET Core apps .{20,}/);
+  assert.ok(manifest.summary.length <= 160, 'the row shows at most 160 characters');
+});
+
